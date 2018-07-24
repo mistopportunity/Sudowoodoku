@@ -24,6 +24,8 @@ namespace Sudowoodoku {
 
 		private readonly List<SudokuNumber> sudokuBlocks;
 
+		private readonly List<NumberSelector> numberBlocks;
+
 		private void allocateSudokuBlocks() {
 
 			var topGrid = SudokuBoard.Children;
@@ -36,11 +38,23 @@ namespace Sudowoodoku {
 
 					var block = (SudokuNumber)((Grid)lowerGrid[y]).Children[0];
 
-					block.BlockIndex = (x * 9) + y;
+					block.BlockIndex = Premultiply(x,y);
 
 					sudokuBlocks.Add(block);
 
+
 				}
+			}
+
+			var numberButtons = NumberBar.Children;
+
+			for(int i = 0;i<9;i++) {
+
+				var numberButton = numberButtons[i] as NumberSelector;
+				numberButton.Number = i + 1;
+
+				numberBlocks.Add(numberButton);
+
 			}
 		}
 
@@ -48,6 +62,8 @@ namespace Sudowoodoku {
 			this.InitializeComponent();
 
 			sudokuBlocks = new List<SudokuNumber>();
+
+			numberBlocks = new List<NumberSelector>();
 
 			allocateSudokuBlocks();
 
@@ -73,11 +89,20 @@ namespace Sudowoodoku {
 				case VirtualKey.Down:
 					Navigate(0,1);
 					break;
+				case VirtualKey.Escape:
+				case VirtualKey.GamepadB:
+					if(selectedBlock != null) {
+						selectedBlock.Deselect();
+						selectedBlock = null;
+						hideNumberBar();
+					}
+					break;
+				case VirtualKey.GamepadA:
 				case VirtualKey.Enter:
 					if(selectedBlock == null) {
 						BlockTapped(softSelected);
 					} else {
-						BlockTapped(selectedBlock);
+						NumberTapped(selectedNumber.Number);
 					}
 					break;
 			}
@@ -85,78 +110,116 @@ namespace Sudowoodoku {
 
 		private void Navigate(int xDelta,int yDelta) {
 			if(selectedBlock != null) {
+				if(yDelta != 0) {
+					xDelta = yDelta;
+				}
+				if(xDelta < 0) {
+					selectedNumber.Deselect();
+					if(selectedNumber.Number - 1 < 1) {
+
+						selectedNumber = numberBlocks[8];
+
+					} else {
+						selectedNumber = numberBlocks[selectedNumber.Number - 2];
+					}
+					selectedNumber.Select();
+				} else if(xDelta > 0) {
+					selectedNumber.Deselect();
+					if(selectedNumber.Number > 8) {
+
+						selectedNumber = numberBlocks[0];
+
+					} else {
+						selectedNumber = numberBlocks[selectedNumber.Number];
+					}
+					selectedNumber.Select();
+				}
 				return;
 			}
 			if(softSelected == null) {
-				softSelected = sudokuBlocks.First();
+				softSelected = sudokuBlocks[40];
 				softSelected.SoftSelect();
 			} else {
 
+				var blockIndex = GetSudokuIndexes(softSelected.BlockIndex);
 
-				var virtualIndex = GetVirtualIndex(
-					softSelected.BlockIndex
-				);
+				var newIndex = softSelected.BlockIndex;
 
-				var newX = virtualIndex.Item1;
-				var newY = virtualIndex.Item2;
 
 				if(xDelta < 0) {
-					if(virtualIndex.Item1 + xDelta >= 0) {
-						newX += xDelta;
+
+					if(!(blockIndex.Item1 % 3 == 0 && blockIndex.Item2 % 3 == 0)) {
+						if((blockIndex.Item2 % 3) - 1 >= 0) {
+
+							newIndex -= 1;
+
+						} else if(blockIndex.Item1 % 3 >= 0) {
+
+							newIndex -= 7;
+
+						}
 					}
+
+
 				} else if(xDelta > 0) {
-					if(virtualIndex.Item1 + xDelta <= 8) {
-						newX += xDelta;
+
+					if(!(blockIndex.Item1 % 3 == 2 && blockIndex.Item2 % 3 == 2)) {
+						if((blockIndex.Item2 % 3) + 1 <= 2) {
+
+							newIndex += 1;
+
+						} else if(blockIndex.Item1 % 3 <= 2) {
+
+							newIndex += 7;
+
+						}
 					}
+
+
 				}
 
 				if(yDelta < 0) {
 
-					if(virtualIndex.Item2 + yDelta >= 0) {
-						newY += yDelta * 9;
+					if(!(blockIndex.Item1 / 3 == 0 && blockIndex.Item2 / 3 == 0)) {
+						if((blockIndex.Item2 / 3 % 3) - 1 >= 0) {
+							newIndex -= 3;
+						} else if(blockIndex.Item2 / 3 % 3 >= 0) {
+							newIndex -= 21;
+						}
 					}
+
+
 
 				} else if(yDelta > 0) {
 
-					if(virtualIndex.Item2 + yDelta <= 8) {
-						newY += yDelta * 9;
+					if(!(blockIndex.Item1 / 3 == 2 && blockIndex.Item2 / 3 == 2)) {
+						if((blockIndex.Item2 / 3 % 3) + 1 <= 2) {
+							newIndex += 3;
+						} else if(blockIndex.Item2 / 3 % 3 <= 2) {
+							newIndex += 21;
+						}
 					}
 
 				}
 
-				if(newX != virtualIndex.Item1 || newY != virtualIndex.Item2) {
-					var premultiplied = GetPremultiplied(newX,newY);
+				if(newIndex != softSelected.BlockIndex) {
 
 					softSelected.SoftDeselect();
 
 					softSelected = sudokuBlocks[
-						premultiplied
+						newIndex
 					];
 					softSelected.SoftSelect();
 				}
 			}
 		}
 
-		//Top 1 by bottom 3 returns a 2 in this example
-
-		//  1 1 2   1 1 1   1 1 1
-		//  1 1 1   1 1 1   1 1 1
-		//  1 1 1   1 1 1   1 1 1
-		//
-		//  1 1 1   1 1 1   1 1 1
-		//  1 1 1   1 1 1   1 1 1
-		//  1 1 1   1 1 1   1 1 1
-		//
-		//  1 1 1   1 1 1   1 1 1
-		//  1 1 1   1 1 1   1 1 1
-		//  1 1 1   1 1 1   1 1 1
-
 		internal int Premultiply(int x,int y) {
 			return (x * 9) + y;
 		}
 
 		internal SudokuNumber GetSudokuBlock(int top,int bottom) {
-			return sudokuBlocks[(top * 9) + bottom];
+			return sudokuBlocks[Premultiply(top,bottom)];
 		}
 
 		internal Tuple<int,int> GetSudokuIndexes(int premultiplied) {
@@ -168,16 +231,66 @@ namespace Sudowoodoku {
 
 		internal Tuple<int,int> GetVirtualIndex(int premultiplied) {
 
-		}
+			var indexes = GetSudokuIndexes(premultiplied);
 
-		internal int GetPremultiplied(int virtualIndexX,int virtualIndexY) {
+			var x = 0;
+			var y = 0;
+
+
+			x += (indexes.Item1 % 3) * 3;
+			y += (indexes.Item1 / 3) * 3;
+
+			x += indexes.Item2 % 3;
+			y += indexes.Item2 / 3;
+
+			return new Tuple<int,int>(x,y);
 
 
 		}
 
 		private SudokuNumber selectedBlock = null;
-
 		private SudokuNumber softSelected = null;
+
+		private void showNumberBar() {
+
+			var blockIndex = GetSudokuIndexes(selectedBlock.BlockIndex);
+
+			var row = (blockIndex.Item2 / 3 % 3) + ((blockIndex.Item1 / 3) * 3);
+
+			if(row < 7) {
+				NumberBar.Margin = new Thickness(0,(row+1)*11,0,0);
+			} else {
+				NumberBar.Margin = new Thickness(0,99 - ((10 - row) * 11),0,0);
+			}
+
+			NumberBar.Visibility = Visibility.Visible;
+
+
+		}
+
+		public void SwapNumberSelection(NumberSelector selector) {
+
+			selectedNumber.Deselect();
+
+			selectedNumber = selector;
+
+		}
+
+		private void hideNumberBar() {
+			NumberBar.Visibility = Visibility.Collapsed;
+		}
+
+		private NumberSelector selectedNumber = null;
+
+		internal void NumberTapped(int number) {
+
+			selectedBlock.Number = number;
+
+			//todo make the actual f-ing game
+
+			BlockTapped(selectedBlock);
+			return;
+		}
 
 		internal void BlockTapped(SudokuNumber block) {
 
@@ -185,9 +298,24 @@ namespace Sudowoodoku {
 			if(isNull) {
 				selectedBlock = block;
 				selectedBlock.Select();
+				showNumberBar();
+
+				if(selectedNumber != null) {
+					selectedNumber.Deselect();
+				}
+
+				var sudokuIndexes = GetSudokuIndexes(selectedBlock.BlockIndex);
+
+				var column = ((sudokuIndexes.Item1 % 3) * 3) + (sudokuIndexes.Item2 % 3);
+
+
+				selectedNumber = numberBlocks[column];
+				selectedNumber.Select();
+
 			} else {
 				selectedBlock.Deselect();
 				selectedBlock = null;
+				hideNumberBar();
 			}
 			foreach(var otherBlock in sudokuBlocks) {
 				otherBlock.ExternalFocusChanged(bySelect: isNull);
@@ -199,6 +327,10 @@ namespace Sudowoodoku {
 
 			if(softSelected == null) {
 				softSelected = block;
+				return;
+			}
+
+			if(softSelected == block) {
 				return;
 			}
 

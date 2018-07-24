@@ -296,7 +296,19 @@
 					</Grid>
 				</Grid>
 
-				<Grid x:Name="NumberSelector" Height="11" Width="99.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,22,0,0" Background="#FF1D1D1D" />
+				<Grid x:Name="NumberBar" Height="11" Width="99.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Background="#FF1D1D1D" Visibility="Collapsed">
+					<local:NumberSelector Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+					<local:NumberSelector Margin="11,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+					<local:NumberSelector Margin="22,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+
+					<local:NumberSelector Margin="33,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+					<local:NumberSelector Margin="44,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+					<local:NumberSelector Margin="55,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+
+					<local:NumberSelector Margin="66,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+					<local:NumberSelector Margin="77,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+					<local:NumberSelector Margin="88,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></local:NumberSelector>
+				</Grid>
 				
 			</Grid>
 
