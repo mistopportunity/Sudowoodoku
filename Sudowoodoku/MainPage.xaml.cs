@@ -153,6 +153,9 @@ namespace Sudowoodoku {
 			//fill with template
 			//that is, set readonly only properties and change blanks to zeroes
 
+			sudokuBlocks[32].IsReadOnly = true;
+			sudokuBlocks[32].Number = 32;
+
 			foreach(var otherBlock in sudokuBlocks) {
 				otherBlock.ExternalFocusChanged(bySelect: false);
 			}
@@ -224,7 +227,7 @@ namespace Sudowoodoku {
 				case VirtualKey.GamepadB:
 					if(selectedBlock != null) {
 						BlockTapped(selectedBlock);
-					} else {
+					} else if(softSelected != null && !softSelected.IsReadOnly) {
 						softSelected.Number = 0;
 					}
 					break;

@@ -136,7 +136,16 @@ namespace Sudowoodoku {
 			hasCursor = false;
 		}
 
+		private bool tappedByMouse = false;
+
 		private void UserControl_Tapped(object sender,TappedRoutedEventArgs e) {
+			if(!tappedByMouse) {
+				clickTrigger();
+			}
+			tappedByMouse = false;
+		}
+
+		private void clickTrigger() {
 			var frame = Window.Current.Content as Frame;
 			var page = frame.Content as MainPage;
 			page.BlockTapped(this);
@@ -148,6 +157,11 @@ namespace Sudowoodoku {
 				updateBorder(true);
 			}
 			hasCursor = true;
+		}
+
+		private void UserControl_PointerReleased(object sender,PointerRoutedEventArgs e) {
+			tappedByMouse = true;
+			clickTrigger();
 		}
 	}
 }

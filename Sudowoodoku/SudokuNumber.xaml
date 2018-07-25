@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="11"
-    d:DesignWidth="11" PointerEntered="UserControl_PointerEntered" PointerExited="UserControl_PointerExited" Tapped="UserControl_Tapped" PointerMoved="UserControl_PointerMoved">
+    d:DesignWidth="11" PointerEntered="UserControl_PointerEntered" PointerExited="UserControl_PointerExited" Tapped="UserControl_Tapped" PointerMoved="UserControl_PointerMoved" PointerReleased="UserControl_PointerReleased">
 	<Grid x:Name="backgroundGrid">
 		<TextBlock x:Name="textBlock" HorizontalAlignment="Stretch" Text="" TextWrapping="Wrap" VerticalAlignment="Stretch" Foreground="White" FontFamily="Arial" FontSize="8" TextAlignment="Center" Width="11" Height="11"/>
 	</Grid>
