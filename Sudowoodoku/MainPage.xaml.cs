@@ -469,13 +469,20 @@ namespace Sudowoodoku {
 
 			} else {
 
-				if(block == selectedBlock && !fromNumberSelection) {
+				var blockIsFeedback = block == selectedBlock;
+
+				if(!fromNumberSelection && blockIsFeedback) {
 					block.Number = 0;
 				}
-
 				selectedBlock.Deselect();
 				selectedBlock = null;
-				hideNumberBar();
+
+				if(!fromNumberSelection && !blockIsFeedback) {
+					BlockTapped(block);
+				} else {
+					hideNumberBar();
+				}
+
 			}
 			foreach(var otherBlock in sudokuBlocks) {
 				otherBlock.ExternalFocusChanged(bySelect: isNull);

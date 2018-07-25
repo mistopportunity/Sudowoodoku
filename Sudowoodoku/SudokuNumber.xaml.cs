@@ -103,14 +103,19 @@ namespace Sudowoodoku {
 		}
 
 		private void UserControl_PointerEntered(object sender,PointerRoutedEventArgs e) {
-
+#if mobiletest
+			return;
+#endif
 			SoftSelect();
-			if(!otherBlockSelected)
+			if(!otherBlockSelected) {
 				sendSoftSelect();
+			}
 		}
 
 		private void UserControl_PointerExited(object sender,PointerRoutedEventArgs e) {
-
+#if mobiletest
+			return;
+#endif
 			SoftDeselect();
 		}
 
@@ -152,6 +157,9 @@ namespace Sudowoodoku {
 		}
 
 		private void UserControl_PointerMoved(object sender,PointerRoutedEventArgs e) {
+#if mobiletest
+			return;
+#endif
 			if(!selected && !otherBlockSelected && !hasCursor) {
 				sendSoftSelect();
 				updateBorder(true);
@@ -160,6 +168,9 @@ namespace Sudowoodoku {
 		}
 
 		private void UserControl_PointerReleased(object sender,PointerRoutedEventArgs e) {
+#if mobiletest
+			return;
+#endif
 			tappedByMouse = true;
 			clickTrigger();
 		}
