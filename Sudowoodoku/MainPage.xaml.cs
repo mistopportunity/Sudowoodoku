@@ -14,7 +14,9 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Navigation;
+using System.Text;
 
 namespace Sudowoodoku {
 	/// <summary>
@@ -30,7 +32,7 @@ namespace Sudowoodoku {
 
 			var topGrid = SudokuBoard.Children;
 
-			for(int x = 0;x<9;x++) {
+			for(int x = 1;x<10;x++) {
 
 				var lowerGrid = ((Grid)topGrid[x]).Children;
 
@@ -38,7 +40,7 @@ namespace Sudowoodoku {
 
 					var block = (SudokuNumber)((Grid)lowerGrid[y]).Children[0];
 
-					block.BlockIndex = Premultiply(x,y);
+					block.BlockIndex = Premultiply(x-1,y);
 
 					sudokuBlocks.Add(block);
 
@@ -58,6 +60,127 @@ namespace Sudowoodoku {
 			}
 		}
 
+		private bool gameEnded = false;
+		private async void EndGame() {
+
+
+			foreach(var otherBlock in sudokuBlocks) {
+				otherBlock.ExternalFocusChanged(bySelect: true);
+			}
+
+			softSelected = null;
+			selectedBlock = null;
+			gameEnded = true;
+
+			var completionTime = DateTime.Now - startTime;
+			var completionTimeString = formatCompletionTime(completionTime);
+
+
+			var messageDialog = new MessageDialog($"{completionTimeString} is how long it took you to finish{(layer > 1 ? " this layer" : "")}" +
+
+								$"{(layer > 1 ? $"\n{formatCompletionTime(DateTime.Now - originalStartTime)} is your total time for all layers" : "")}" +
+												  $"\nWould you like to keep playing?",
+				"Congratulations!") {
+				DefaultCommandIndex = 0,
+				CancelCommandIndex = 1,
+			};
+
+			messageDialog.Commands.Add(new UICommand("Yes, duh! Let's go!",(action) => {
+
+				int seed = randomSeedMaker.Next();
+
+
+				LoadBoard(new SimpleSudoku(),seed,1 * Math.Pow(0.92f,++layer));
+			}));
+
+			messageDialog.Commands.Add(new UICommand("No, I need more canned soup!",(action) => {
+
+				Frame.Navigate(typeof(MenuPage));
+
+			}));
+
+			await messageDialog.ShowAsync();
+
+		}
+
+		private ISudokuBoard currentSudokuBoard;
+
+		private DateTime startTime;
+
+		private DateTime originalStartTime;
+
+		private string formatCompletionTime(TimeSpan timeSpan) {
+
+			var stringBuilder = new StringBuilder();
+
+
+			stringBuilder.Append(timeSpan.Hours.ToString().PadLeft(2,'0'));
+
+			stringBuilder.Append(':');
+
+			stringBuilder.Append(timeSpan.Minutes.ToString().PadLeft(2,'0'));
+
+			stringBuilder.Append(':');
+
+			stringBuilder.Append(timeSpan.Seconds.ToString().PadLeft(2,'0'));
+
+
+			var extraDays = Math.Floor(timeSpan.TotalDays);
+			if(extraDays > 0) {
+				stringBuilder.Append($" and {extraDays}{(extraDays != 1 ? "s" : "")}");
+			}
+
+			return stringBuilder.ToString();
+
+
+		}
+
+
+
+		private void LoadBoard(ISudokuBoard sudokuBoard,int seed,double difficulty) {
+
+
+
+			statusTextBlock.Text = $"seed: {startSeed} layer: {layer}";
+
+
+			currentSudokuBoard = sudokuBoard;
+			currentSudokuBoard.PopulateBoard(seed,(int)Math.Floor(81 * difficulty));
+
+
+			var template = currentSudokuBoard.GetTemplateBoard();
+
+			//fill with template
+			//that is, set readonly only properties and change blanks to zeroes
+
+			foreach(var otherBlock in sudokuBlocks) {
+				otherBlock.ExternalFocusChanged(bySelect: false);
+			}
+
+			gameEnded = false;
+
+			startTime = DateTime.Now;
+
+		}
+
+		private Random randomSeedMaker;
+		private uint startSeed;
+		private uint layer = 1;
+
+
+		protected override void OnNavigatedTo(NavigationEventArgs e) {
+
+			var seed = (int)e.Parameter;
+
+			startSeed = (uint)seed;
+
+			randomSeedMaker = new Random(seed);
+
+			LoadBoard(new SimpleSudoku(),seed,1f);
+
+			originalStartTime = startTime;
+		}
+
 		public MainPage() {
 			this.InitializeComponent();
 
@@ -65,9 +188,9 @@ namespace Sudowoodoku {
 
 			numberBlocks = new List<NumberSelector>();
 
-			allocateSudokuBlocks();
-
 			Window.Current.CoreWindow.KeyUp += CoreWindow_KeyUp;
+
+			allocateSudokuBlocks();
 
 		}
 
@@ -92,9 +215,7 @@ namespace Sudowoodoku {
 				case VirtualKey.Escape:
 				case VirtualKey.GamepadB:
 					if(selectedBlock != null) {
-						selectedBlock.Deselect();
-						selectedBlock = null;
-						hideNumberBar();
+						BlockTapped(selectedBlock);
 					}
 					break;
 				case VirtualKey.GamepadA:
@@ -109,6 +230,9 @@ namespace Sudowoodoku {
 		}
 
 		private void Navigate(int xDelta,int yDelta) {
+			if(gameEnded) {
+				return;
+			}
 			if(selectedBlock != null) {
 				if(yDelta != 0) {
 					xDelta = yDelta;
@@ -229,25 +353,6 @@ namespace Sudowoodoku {
 			);
 		}
 
-		internal Tuple<int,int> GetVirtualIndex(int premultiplied) {
-
-			var indexes = GetSudokuIndexes(premultiplied);
-
-			var x = 0;
-			var y = 0;
-
-
-			x += (indexes.Item1 % 3) * 3;
-			y += (indexes.Item1 / 3) * 3;
-
-			x += indexes.Item2 % 3;
-			y += indexes.Item2 / 3;
-
-			return new Tuple<int,int>(x,y);
-
-
-		}
-
 		private SudokuNumber selectedBlock = null;
 		private SudokuNumber softSelected = null;
 
@@ -258,9 +363,9 @@ namespace Sudowoodoku {
 			var row = (blockIndex.Item2 / 3 % 3) + ((blockIndex.Item1 / 3) * 3);
 
 			if(row < 7) {
-				NumberBar.Margin = new Thickness(0,(row+1)*11,0,0);
+				NumberBar.Margin = new Thickness(0,((row+1)*11)+6,0,0);
 			} else {
-				NumberBar.Margin = new Thickness(0,99 - ((10 - row) * 11),0,0);
+				NumberBar.Margin = new Thickness(0,((99 - ((10 - row)) * 11))+6,0,0);
 			}
 
 			NumberBar.Visibility = Visibility.Visible;
@@ -284,18 +389,40 @@ namespace Sudowoodoku {
 
 		internal void NumberTapped(int number) {
 
-			selectedBlock.Number = number;
+			if(selectedBlock.Number == number) {
+				selectedBlock.Number = 0;
+			} else {
+				selectedBlock.Number = number;
+			}
 
-			//todo make the actual f-ing game
+			var pieceIndexes = GetSudokuIndexes(selectedBlock.BlockIndex);
+
+			currentSudokuBoard.UpdatePiece(
+				selectedBlock.Number,
+				pieceIndexes.Item1,
+				pieceIndexes.Item2
+			);
 
 			BlockTapped(selectedBlock);
-			return;
+
+			if(currentSudokuBoard.BoardComplete()) {
+				EndGame();
+			}
+
 		}
 
 		internal void BlockTapped(SudokuNumber block) {
 
+			if(gameEnded) {
+				return;
+			}
+
 			var isNull = selectedBlock == null;
 			if(isNull) {
+
+				if(block.IsReadOnly) {
+					return;
+				}
 				selectedBlock = block;
 				selectedBlock.Select();
 				showNumberBar();
@@ -306,13 +433,22 @@ namespace Sudowoodoku {
 
 				var sudokuIndexes = GetSudokuIndexes(selectedBlock.BlockIndex);
 
-				var column = ((sudokuIndexes.Item1 % 3) * 3) + (sudokuIndexes.Item2 % 3);
+
+				int column;
+
+				if(selectedBlock.Number == 0) {
+					column = ((sudokuIndexes.Item1 % 3) * 3) + (sudokuIndexes.Item2 % 3);
+				} else {
+					column = selectedBlock.Number - 1;
+				}
 
 
 				selectedNumber = numberBlocks[column];
 				selectedNumber.Select();
 
+
 			} else {
+
 				selectedBlock.Deselect();
 				selectedBlock = null;
 				hideNumberBar();

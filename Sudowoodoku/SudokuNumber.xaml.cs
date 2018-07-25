@@ -22,8 +22,21 @@ namespace Sudowoodoku {
 		public SudokuNumber() {
 			this.InitializeComponent();
 		}
+		private bool isReadOnly = false;
 		public bool IsReadOnly {
-			get; set;
+			get {
+				return isReadOnly;
+			}
+			set {
+				isReadOnly = value;
+				if(isReadOnly) {
+					readOnlyBackground = new SolidColorBrush(Color.FromArgb(180,0,0,0));
+					updateBorder(false);
+				} else {
+					readOnlyBackground = null;
+					updateBorder(false);
+				}
+			}
 		}
 		private int number = 0;
 		private void updateNumber() {
@@ -33,13 +46,14 @@ namespace Sudowoodoku {
 				textBlock.Text = number.ToString();
 			}
 		}
+
+		private SolidColorBrush readOnlyBackground;
+
 		public int Number {
 			get {
 				return number;
 			}
 			set {
-				if(IsReadOnly)
-					return;
 				number = value;
 				updateNumber();
 			}
@@ -84,7 +98,7 @@ namespace Sudowoodoku {
 			if(showBorder) {
 				backgroundGrid.Background = new SolidColorBrush(Color.FromArgb(255,0,0,0));
 			} else {
-				backgroundGrid.Background = null;
+				backgroundGrid.Background = readOnlyBackground;
 			}
 		}
 

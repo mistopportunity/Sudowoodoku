@@ -1,0 +1,19 @@
+﻿<Page
+    x:Class="Sudowoodoku.MenuPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sudowoodoku"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="Black">
+		<Viewbox>
+			<StackPanel Width="350" Height="350" Padding="25,0,25,0">
+				<TextBlock Text="sudokoowdoku" TextWrapping="Wrap" Margin="0,115,0,0" HorizontalAlignment="Center"/>
+				<TextBox x:Name="seedInput" Margin="0,10,0,0" PlaceholderText="game seed" InputScope="Number"/>
+				<Button Content="get the party started" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" Click="Button_Click"/>
+			</StackPanel>
+		</Viewbox>
+    </Grid>
+</Page>

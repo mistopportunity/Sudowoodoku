@@ -8,11 +8,16 @@
     mc:Ignorable="d">
 
 	<Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black">
-		<Viewbox Stretch="Uniform">
 
-			<Grid x:Name="SudokuBoard" Width="99" Height="99" >
+		<Viewbox Stretch="Uniform" Margin="0,0,0,0">
 
-				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Background="#FF0C00FF">
+			<Grid x:Name="SudokuBoard" Width="99" Height="104">
+
+				<Grid Background="Black" Height="6" Width="99" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+					<TextBlock x:Name="statusTextBlock" HorizontalAlignment="Center" Text="" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="3" TextAlignment="Center" FontFamily="Calibri Light" FontWeight="Bold" Foreground="White"/>
+				</Grid>
+
+				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Background="#FF0C00FF" Margin="0,6,0,0">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#77363636">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
@@ -43,7 +48,7 @@
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
 				</Grid>
-				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Margin="33,0,0,0" Background="#FF00E4E4">
+				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Margin="33,6,0,0" Background="#FF00E4E4">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#7F838383">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
@@ -74,7 +79,7 @@
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
 				</Grid>
-				<Grid HorizontalAlignment="Left" Height="33" Margin="66,0,0,0" VerticalAlignment="Top" Width="33" Background="#FF0C00FF">
+				<Grid HorizontalAlignment="Left" Height="33" Margin="66,6,0,0" VerticalAlignment="Top" Width="33" Background="#FF0C00FF">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#77363636">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
@@ -107,7 +112,7 @@
 				</Grid>
 
 
-				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Margin="0,33,0,0" Background="#FF00E4E4">
+				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Margin="0,39,0,0" Background="#FF00E4E4">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#7F838383">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
@@ -138,7 +143,7 @@
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
 				</Grid>
-				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Margin="33,33,0,0" Background="#FF0C00FF">
+				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Margin="33,39,0,0" Background="#FF0C00FF">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#77363636">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
@@ -169,7 +174,7 @@
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
 				</Grid>
-				<Grid HorizontalAlignment="Left" Height="33" Margin="66,33,0,0" VerticalAlignment="Top" Width="33" Background="#FF00E4E4">
+				<Grid HorizontalAlignment="Left" Height="33" Margin="66,39,0,0" VerticalAlignment="Top" Width="33" Background="#FF00E4E4">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#7F838383">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
@@ -201,7 +206,7 @@
 					</Grid>
 				</Grid>
 
-				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Background="#FF0C00FF" Margin="0,66,0,0">
+				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Background="#FF0C00FF" Margin="0,72,0,0">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#77363636">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
@@ -232,7 +237,7 @@
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
 				</Grid>
-				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Margin="33,66,0,0" Background="#FF00E4E4">
+				<Grid HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="33" Margin="33,72,0,0" Background="#FF00E4E4">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#7F838383">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
@@ -264,7 +269,7 @@
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
 				</Grid>
-				<Grid HorizontalAlignment="Left" Height="33" Margin="66,66,0,0" VerticalAlignment="Top" Width="33" Background="#FF0C00FF">
+				<Grid HorizontalAlignment="Left" Height="33" Margin="66,72,0,0" VerticalAlignment="Top" Width="33" Background="#FF0C00FF">
 					<Grid HorizontalAlignment="Left" Height="11" VerticalAlignment="Top" Width="11" Background="#77363636">
 						      <local:SudokuNumber></local:SudokuNumber>
 					</Grid>
