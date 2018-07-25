@@ -224,6 +224,8 @@ namespace Sudowoodoku {
 				case VirtualKey.GamepadB:
 					if(selectedBlock != null) {
 						BlockTapped(selectedBlock);
+					} else {
+						softSelected.Number = 0;
 					}
 					break;
 				case VirtualKey.GamepadA:
@@ -419,15 +421,14 @@ namespace Sudowoodoku {
 				pieceIndexes.Item2
 			);
 
-			BlockTapped(selectedBlock);
+			BlockTapped(selectedBlock,true);
 
 			if(currentSudokuBoard.BoardComplete()) {
 				EndGame();
 			}
 
 		}
-
-		internal void BlockTapped(SudokuNumber block) {
+		internal void BlockTapped(SudokuNumber block,bool fromNumberSelection = false) {
 
 			if(gameEnded) {
 				return;
@@ -464,6 +465,10 @@ namespace Sudowoodoku {
 
 
 			} else {
+
+				if(block == selectedBlock && !fromNumberSelection) {
+					block.Number = 0;
+				}
 
 				selectedBlock.Deselect();
 				selectedBlock = null;

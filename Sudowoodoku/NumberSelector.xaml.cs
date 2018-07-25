@@ -47,14 +47,25 @@ namespace Sudowoodoku {
 			}
 		}
 
-		private void UserControl_PointerEntered(object sender,PointerRoutedEventArgs e) {
+		private void pushSelectionUpdate() {
 			var frame = Window.Current.Content as Frame;
 			var page = frame.Content as MainPage;
 
 			page.SwapNumberSelection(this);
 
 			updateBorder(true);
+		}
 
+		private void UserControl_PointerEntered(object sender,PointerRoutedEventArgs e) {
+
+			pushSelectionUpdate();
+
+		}
+
+		private void UserControl_PointerMoved(object sender,PointerRoutedEventArgs e) {
+			if(backgroundGrid.Background == null) {
+				pushSelectionUpdate();
+			}
 		}
 
 		private void UserControl_Tapped(object sender,TappedRoutedEventArgs e) {
@@ -70,7 +81,6 @@ namespace Sudowoodoku {
 		public void Deselect() {
 			updateBorder(showBorder: false);
 		}
-
 
 	}
 }

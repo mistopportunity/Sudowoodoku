@@ -141,5 +141,13 @@ namespace Sudowoodoku {
 			var page = frame.Content as MainPage;
 			page.BlockTapped(this);
 		}
+
+		private void UserControl_PointerMoved(object sender,PointerRoutedEventArgs e) {
+			if(!selected && !otherBlockSelected && !hasCursor) {
+				sendSoftSelect();
+				updateBorder(true);
+			}
+			hasCursor = true;
+		}
 	}
 }
