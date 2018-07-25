@@ -76,9 +76,9 @@ namespace Sudowoodoku {
 			var completionTimeString = formatCompletionTime(completionTime);
 
 
-			var messageDialog = new MessageDialog($"{completionTimeString} is how long it took you to finish{(layer > 1 ? " this layer" : "")}" +
+			var messageDialog = new MessageDialog($"{completionTimeString} is how long it took you to finish{(layer > 1 ? " this tier" : "")}" +
 
-								$"{(layer > 1 ? $"\n{formatCompletionTime(DateTime.Now - originalStartTime)} is your total time for all layers" : "")}" +
+								$"{(layer > 1 ? $"\n{formatCompletionTime(DateTime.Now - originalStartTime)} is your total time for all tiers" : "")}" +
 												  $"\nWould you like to keep playing?",
 				"Congratulations!") {
 				DefaultCommandIndex = 1,
@@ -141,7 +141,7 @@ namespace Sudowoodoku {
 
 
 
-			statusTextBlock.Text = $"seed: {startSeed} layer: {layer}";
+			statusTextBlock.Text = $"level: {startSeed} tier: {layer}";
 
 
 			currentSudokuBoard = sudokuBoard;

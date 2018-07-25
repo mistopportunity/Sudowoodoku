@@ -72,7 +72,7 @@ namespace Sudowoodoku {
 				} else {
 
 					var messageDialog = new MessageDialog(
-						"A seed should be a number between 0 and 4,294,967,295! (no symbols)","Whoopsies!"
+						"A level number should be between 0 and 4,294,967,295! (no symbols)","Whoopsies!"
 					) {
 						DefaultCommandIndex = 0,
 						CancelCommandIndex = 0
