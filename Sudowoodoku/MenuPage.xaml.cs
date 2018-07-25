@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Windows.System;
+using System.Windows;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
+using Windows.UI.Core;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,6 +28,42 @@ namespace Sudowoodoku {
 			this.InitializeComponent();
 		}
 
+		protected override void OnNavigatedTo(NavigationEventArgs e) {
+			base.OnNavigatedTo(e);
+			Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+		}
+
+		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e) {
+			base.OnNavigatingFrom(e);
+			Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
+		}
+
+		private void CoreWindow_KeyDown(CoreWindow sender,KeyEventArgs args) {
+
+			switch(args.VirtualKey) {
+
+				case VirtualKey.GamepadDPadDown:
+				case VirtualKey.GamepadDPadRight:
+				case VirtualKey.Right:
+				case VirtualKey.Down:
+
+
+					FocusManager.TryMoveFocus(FocusNavigationDirection.Previous);
+
+					break;
+				case VirtualKey.GamepadDPadLeft:
+				case VirtualKey.GamepadDPadUp:
+				case VirtualKey.Left:
+				case VirtualKey.Up:
+
+					FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
+
+					break;
+
+			}
+			
+		}
+
 		private async void Button_Click(object sender,RoutedEventArgs e) {
 			if(seedInput.Text != string.Empty) {
 				if(uint.TryParse(seedInput.Text,out uint seed)) {
@@ -42,6 +81,8 @@ namespace Sudowoodoku {
 					messageDialog.Commands.Add(new UICommand("Okay, I'm sorry! Please forgive me!"));
 
 					await messageDialog.ShowAsync();
+
+
 
 				}
 			} else {

@@ -81,8 +81,8 @@ namespace Sudowoodoku {
 								$"{(layer > 1 ? $"\n{formatCompletionTime(DateTime.Now - originalStartTime)} is your total time for all layers" : "")}" +
 												  $"\nWould you like to keep playing?",
 				"Congratulations!") {
-				DefaultCommandIndex = 0,
-				CancelCommandIndex = 1,
+				DefaultCommandIndex = 1,
+				CancelCommandIndex = 0,
 			};
 
 			messageDialog.Commands.Add(new UICommand("Yes, duh! Let's go!",(action) => {
@@ -167,8 +167,9 @@ namespace Sudowoodoku {
 		private uint startSeed;
 		private uint layer = 1;
 
-
 		protected override void OnNavigatedTo(NavigationEventArgs e) {
+
+			base.OnNavigatedTo(e);
 
 			var seed = (int)e.Parameter;
 
@@ -176,9 +177,18 @@ namespace Sudowoodoku {
 
 			randomSeedMaker = new Random(seed);
 
-			LoadBoard(new SimpleSudoku(),seed,1f);
+			LoadBoard(new SimpleSudoku(),randomSeedMaker.Next(),1f);
 
 			originalStartTime = startTime;
+
+			Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+		}
+
+		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e) {
+
+			base.OnNavigatingFrom(e);
+
+			Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
 		}
 
 		public MainPage() {
@@ -188,13 +198,11 @@ namespace Sudowoodoku {
 
 			numberBlocks = new List<NumberSelector>();
 
-			Window.Current.CoreWindow.KeyUp += CoreWindow_KeyUp;
-
 			allocateSudokuBlocks();
 
 		}
 
-		private void CoreWindow_KeyUp(CoreWindow sender,KeyEventArgs args) {
+		private void CoreWindow_KeyDown(CoreWindow sender,KeyEventArgs args) {
 			switch(args.VirtualKey) {
 				case VirtualKey.GamepadDPadLeft:
 				case VirtualKey.Left:
@@ -282,6 +290,8 @@ namespace Sudowoodoku {
 							newIndex -= 7;
 
 						}
+					} else {
+						newIndex += 20;
 					}
 
 
@@ -297,6 +307,8 @@ namespace Sudowoodoku {
 							newIndex += 7;
 
 						}
+					} else {
+						newIndex -= 20;
 					}
 
 
@@ -310,6 +322,8 @@ namespace Sudowoodoku {
 						} else if(blockIndex.Item2 / 3 % 3 >= 0) {
 							newIndex -= 21;
 						}
+					} else {
+						newIndex += 60;
 					}
 
 
@@ -322,6 +336,8 @@ namespace Sudowoodoku {
 						} else if(blockIndex.Item2 / 3 % 3 <= 2) {
 							newIndex += 21;
 						}
+					} else {
+						newIndex -= 60;
 					}
 
 				}

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Sudowoodoku {
 	internal sealed class SimpleSudoku:ISudokuBoard {
 		public bool BoardComplete() {
-			return true;
+			return false;
 		}
 
 		public int[,] GetTemplateBoard() {

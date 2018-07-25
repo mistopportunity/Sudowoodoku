@@ -103,10 +103,17 @@ namespace Sudowoodoku {
 		}
 
 		private void UserControl_PointerEntered(object sender,PointerRoutedEventArgs e) {
+
 			SoftSelect();
 			if(!otherBlockSelected)
 				sendSoftSelect();
 		}
+
+		private void UserControl_PointerExited(object sender,PointerRoutedEventArgs e) {
+
+			SoftDeselect();
+		}
+
 
 		private void sendSoftSelect() {
 			var frame = Window.Current.Content as Frame;
@@ -114,9 +121,6 @@ namespace Sudowoodoku {
 			page.UpdateSoftSelected(this);
 		}
 
-		private void UserControl_PointerExited(object sender,PointerRoutedEventArgs e) {
-			SoftDeselect();
-		}
 
 		public void SoftSelect() {
 			if(!selected && !otherBlockSelected) {
