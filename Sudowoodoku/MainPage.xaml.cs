@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Windows;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Navigation;
 using System.Text;
+using Windows.Foundation.Metadata;
 
 namespace Sudowoodoku {
 	/// <summary>
@@ -81,8 +83,8 @@ namespace Sudowoodoku {
 								$"{(layer > 1 ? $"\n{formatCompletionTime(DateTime.Now - originalStartTime)} is your total time for all tiers" : "")}" +
 												  $"\nWould you like to keep playing?",
 				"Congratulations!") {
-				DefaultCommandIndex = 1,
-				CancelCommandIndex = 0,
+				DefaultCommandIndex = 0,
+				CancelCommandIndex = 1,
 			};
 
 			messageDialog.Commands.Add(new UICommand("Yes, duh! Let's go!",(action) => {
@@ -139,14 +141,9 @@ namespace Sudowoodoku {
 
 		private void LoadBoard(ISudokuBoard sudokuBoard,int seed,double difficulty) {
 
-
-
 			statusTextBlock.Text = $"level: {startSeed} tier: {layer}";
-
-
 			currentSudokuBoard = sudokuBoard;
 			currentSudokuBoard.PopulateBoard(seed,(int)Math.Floor(81 * difficulty));
-
 
 			var template = currentSudokuBoard.GetTemplateBoard();
 
@@ -185,6 +182,12 @@ namespace Sudowoodoku {
 			originalStartTime = startTime;
 
 			Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+
+			//subscribe to back button
+			var currentView = SystemNavigationManager.GetForCurrentView();
+			currentView.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+			currentView.BackRequested += CurrentView_BackRequested;
+
 		}
 
 		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e) {
@@ -192,6 +195,30 @@ namespace Sudowoodoku {
 			base.OnNavigatingFrom(e);
 
 			Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
+
+			//unsubscribe from back button
+			var currentView = SystemNavigationManager.GetForCurrentView();
+			currentView.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+			currentView.BackRequested -= CurrentView_BackRequested;
+		}
+
+		private async void CurrentView_BackRequested(object sender,BackRequestedEventArgs e) {
+
+			MessageDialog dialog = new MessageDialog("Are you sure you want to quit playing?","This is so sad!") {
+				DefaultCommandIndex = 0,
+				CancelCommandIndex = 1,
+			};
+			dialog.Commands.Add(new UICommand("Yes, I am sure.",(action) => {
+				if(Frame.CanGoBack) { //Probably not needed but fuck it, right? Who knows what could happen. Maybe a cosmic bit flip?
+					Frame.GoBack();
+				} else {
+					Frame.Navigate(typeof(MenuPage));
+				}
+			}));
+			dialog.Commands.Add(new UICommand("No, I love this"));
+
+			await dialog.ShowAsync();
+
 		}
 
 		public MainPage() {
@@ -416,6 +443,12 @@ namespace Sudowoodoku {
 				selectedBlock.Number = number;
 			}
 
+			if(selectedBlock != softSelected) {
+				softSelected.SoftDeselect();
+				softSelected = selectedBlock;
+				softSelected.Select();
+			}
+
 			var pieceIndexes = GetSudokuIndexes(selectedBlock.BlockIndex);
 
 			currentSudokuBoard.UpdatePiece(
@@ -471,17 +504,32 @@ namespace Sudowoodoku {
 
 				var blockIsFeedback = block == selectedBlock;
 
-				if(!fromNumberSelection && blockIsFeedback) {
-					block.Number = 0;
-				}
 				selectedBlock.Deselect();
 				selectedBlock = null;
 
+				if(!fromNumberSelection && blockIsFeedback) {
+					block.Number = 0;
+					UpdateSoftSelected(block);
+					softSelected.SoftSelect();
+					//return;
+				}
+
 				if(!fromNumberSelection && !blockIsFeedback) {
+
+					softSelected.SoftDeselect();
+					softSelected.Deselect();
+
+					block.SoftSelect();
+
+					softSelected = block;
+
 					BlockTapped(block);
+
+					return;
+
 				} else {
 					hideNumberBar();
-				}
+				} 
 
 			}
 			foreach(var otherBlock in sudokuBlocks) {
@@ -492,12 +540,12 @@ namespace Sudowoodoku {
 
 		internal void UpdateSoftSelected(SudokuNumber block) {
 
-			if(softSelected == null) {
-				softSelected = block;
+			if(softSelected == block) {
 				return;
 			}
 
-			if(softSelected == block) {
+			if(softSelected == null) {
+				softSelected = block;
 				return;
 			}
 

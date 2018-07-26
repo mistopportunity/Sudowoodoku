@@ -157,10 +157,12 @@ namespace Sudowoodoku {
 		}
 
 		private void UserControl_PointerMoved(object sender,PointerRoutedEventArgs e) {
+			return;
 #if mobiletest
 			return;
 #endif
 			if(!selected && !otherBlockSelected && !hasCursor) {
+				//SoftSelect();
 				sendSoftSelect();
 				updateBorder(true);
 			}
