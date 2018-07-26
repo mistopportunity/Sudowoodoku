@@ -11,7 +11,7 @@ namespace Sudowoodoku {
 
 		bool BoardComplete();
 	
-		void PopulateBoard(int seed,int emptyTiles);
+		void PopulateBoard(int seed,int givenTiles);
 
 		int[,] GetTemplateBoard();
 

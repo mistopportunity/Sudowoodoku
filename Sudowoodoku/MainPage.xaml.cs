@@ -147,6 +147,24 @@ namespace Sudowoodoku {
 
 			var template = currentSudokuBoard.GetTemplateBoard();
 
+			for(int x = 0;x<9;x++) {
+
+				for(int y = 0;y<9;y++) {
+
+					var block = sudokuBlocks[Premultiply(x,y)];
+
+					if(template[x,y] == 0) {
+						block.Number = 0;
+						block.IsReadOnly = false;
+					} else {
+						block.Number = template[x,y];
+						block.IsReadOnly = true;
+					}
+
+				}
+			}
+
+
 			//fill with template
 			//that is, set readonly only properties and change blanks to zeroes
 
@@ -177,7 +195,7 @@ namespace Sudowoodoku {
 
 			randomSeedMaker = new Random(seed);
 
-			LoadBoard(new SimpleSudoku(),randomSeedMaker.Next(),1f);
+			LoadBoard(new SimpleSudoku(),seed,1f);
 
 			originalStartTime = startTime;
 
