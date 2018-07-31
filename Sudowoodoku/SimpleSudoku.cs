@@ -21,7 +21,7 @@ namespace Sudowoodoku {
 					indexTranslator = new int[]{ 0,1,2,3,4,5,6,7,8 };
 					break;
 				case 1:
-					indexTranslator = new int[]{ 6,3,0,7,4,1,8,5,3 };
+					indexTranslator = new int[]{ 6,3,0,7,4,1,8,5,2 };
 					break;
 				case 2:
 					indexTranslator = new int[]{ 2,1,0,5,4,3,8,7,6 };
@@ -34,7 +34,10 @@ namespace Sudowoodoku {
 
 				for(int y = 0;y<9;y++) {
 
-					newBoard[indexTranslator[x],indexTranslator[y]] = board[x,y];
+					var newX = indexTranslator[x];
+					var newY = indexTranslator[y];
+
+					newBoard[newX,newY] = board[x,y];
 
 				}
 
@@ -78,6 +81,8 @@ namespace Sudowoodoku {
 			var file = await StorageFile.GetFileFromApplicationUriAsync(uri);
 
 			var lines = await FileIO.ReadLinesAsync(file);
+
+			
 
 			if(lines.Count != 9) {
 				throw new Exception("AHHHHHHHHHHH it's totally fucked m8 (the template valid is invalid)");
@@ -154,47 +159,53 @@ namespace Sudowoodoku {
 		public bool BoardComplete() {
 			if(currentBoardPieces == 81) {
 				//grid checking
-				var gridCounter = new int[9];
 				for(var i = 0;i<9;i++) {
+					var gridCounter = new int[9];
 					for(var x = 0;x<9;x++) {
 						gridCounter[workingBoard[i,x]-1]++;
 					}
-				}
-				for(int i = 0;i<0;i++) {
-					if(gridCounter[i] != 1) {
-						return false;
+					for(int i2 = 0;i2<9;i2++) {
+						if(gridCounter[i2] != 1) {
+							return false;
+						}
 					}
 				}
-				//row checking
-				var rowCounter = new int[9];
+				//column checking
 				for(var i = 0;i<9;i++) {
+					var columnCounter = new int[9];
 					var column = i / 3;
 					var subColumn = i % 3;
 					for(int verticalIndex = 0;verticalIndex<9;verticalIndex++) {
 						var xValue = ((verticalIndex / 3)*3) + column;
 						var yValue = ((verticalIndex % 3)*3) + subColumn;
-						rowCounter[workingBoard[xValue,yValue]-1]++;
+
+						var value = workingBoard[xValue,yValue];
+
+						columnCounter[value-1]++;
+					}
+					for(int i2 = 0;i2<9;i2++) {
+						if(columnCounter[i2] != 1) {
+							return false;
+						}
 					}
 				}
-				for(int i = 0;i<0;i++) {
-					if(rowCounter[i] != 1) {
-						return false;
-					}
-				}
-				//column checking
-				var columnCounter = new int[9];
+				//row checking
 				for(var i = 0;i<9;i++) {
+					var rowCounter = new int[9];
 					var row = i / 3;
 					var subRow = i % 3;
 					for(int horizontalIndex = 0;horizontalIndex<9;horizontalIndex++) {
-						var xValue = (horizontalIndex / 3) + row;
+						var xValue = (horizontalIndex / 3) + (row * 3);
 						var yValue = (horizontalIndex % 3) + (subRow * 3);
-						columnCounter[workingBoard[xValue,yValue]-1]++;
+
+						var value = workingBoard[xValue,yValue];
+
+						rowCounter[value-1]++;
 					}
-				}
-				for(int i = 0;i<0;i++) {
-					if(columnCounter[i] != 1) {
-						return false;
+					for(int i2 = 0;i2<9;i2++) {
+						if(rowCounter[i2] != 1) {
+							return false;
+						}
 					}
 				}
 				return true;
