@@ -76,15 +76,14 @@ namespace Sudowoodoku {
 
 		private async Task<Tuple<int[,],int>> getCheatingBoard(string fileName) {
 
-			var uri = new Uri($"ms-appx:///Template boards/{fileName}");
 
-			var file = await StorageFile.GetFileFromApplicationUriAsync(uri);
+			//Is this proper windows universal? WHo fucking knows! TODO: Error check things because as of now we fail hard af or hang
+			var lines = System.IO.File.ReadAllLines($"Template boards/{fileName}");
 
-			var lines = await FileIO.ReadLinesAsync(file);
 
 			
 
-			if(lines.Count != 9) {
+			if(lines.Length != 9) {
 				throw new Exception("AHHHHHHHHHHH it's totally fucked m8 (the template valid is invalid)");
 			}
 			var board = new int[9,9];
