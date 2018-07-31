@@ -24,7 +24,7 @@ namespace Sudowoodoku {
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class MainPage:Page {
+	public sealed partial class GamePage:Page {
 
 		private readonly List<SudokuNumber> sudokuBlocks;
 
@@ -143,7 +143,7 @@ namespace Sudowoodoku {
 
 			statusTextBlock.Text = $"level: {startSeed} tier: {layer}";
 			currentSudokuBoard = sudokuBoard;
-			currentSudokuBoard.PopulateBoard(seed,(int)Math.Floor(81 * difficulty));
+			currentSudokuBoard.PopulateBoard(seed,difficulty);
 
 			var template = currentSudokuBoard.GetTemplateBoard();
 
@@ -163,13 +163,6 @@ namespace Sudowoodoku {
 
 				}
 			}
-
-
-			//fill with template
-			//that is, set readonly only properties and change blanks to zeroes
-
-			sudokuBlocks[32].IsReadOnly = true;
-			sudokuBlocks[32].Number = 32;
 
 			foreach(var otherBlock in sudokuBlocks) {
 				otherBlock.ExternalFocusChanged(bySelect: false);
@@ -239,7 +232,7 @@ namespace Sudowoodoku {
 
 		}
 
-		public MainPage() {
+		public GamePage() {
 			this.InitializeComponent();
 
 			sudokuBlocks = new List<SudokuNumber>();

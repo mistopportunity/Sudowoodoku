@@ -68,7 +68,7 @@ namespace Sudowoodoku {
 			if(seedInput.Text != string.Empty) {
 				if(uint.TryParse(seedInput.Text,out uint seed)) {
 
-					Frame.Navigate(typeof(MainPage),(int)seed);
+					Frame.Navigate(typeof(GamePage),(int)seed);
 				} else {
 
 					var messageDialog = new MessageDialog(
@@ -86,7 +86,7 @@ namespace Sudowoodoku {
 
 				}
 			} else {
-				Frame.Navigate(typeof(MainPage),(new Random()).Next());
+				Frame.Navigate(typeof(GamePage),(new Random()).Next());
 
 			}
 		}

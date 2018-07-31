@@ -49,7 +49,7 @@ namespace Sudowoodoku {
 
 		private void pushSelectionUpdate() {
 			var frame = Window.Current.Content as Frame;
-			var page = frame.Content as MainPage;
+			var page = frame.Content as GamePage;
 
 			page.SwapNumberSelection(this);
 
@@ -70,7 +70,7 @@ namespace Sudowoodoku {
 
 		private void UserControl_Tapped(object sender,TappedRoutedEventArgs e) {
 			var frame = Window.Current.Content as Frame;
-			var page = frame.Content as MainPage;
+			var page = frame.Content as GamePage;
 			page.NumberTapped(number);
 		}
 

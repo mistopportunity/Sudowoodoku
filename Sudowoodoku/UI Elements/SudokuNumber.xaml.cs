@@ -122,7 +122,7 @@ namespace Sudowoodoku {
 
 		private void sendSoftSelect() {
 			var frame = Window.Current.Content as Frame;
-			var page = frame.Content as MainPage;
+			var page = frame.Content as GamePage;
 			page.UpdateSoftSelected(this);
 		}
 
@@ -152,7 +152,7 @@ namespace Sudowoodoku {
 
 		private void clickTrigger() {
 			var frame = Window.Current.Content as Frame;
-			var page = frame.Content as MainPage;
+			var page = frame.Content as GamePage;
 			page.BlockTapped(this);
 		}
 
