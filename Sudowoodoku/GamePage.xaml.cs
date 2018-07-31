@@ -215,6 +215,8 @@ namespace Sudowoodoku {
 
 		private async void CurrentView_BackRequested(object sender,BackRequestedEventArgs e) {
 
+			e.Handled = true;
+
 			MessageDialog dialog = new MessageDialog("Are you sure you want to quit playing?","This is so sad!") {
 				DefaultCommandIndex = 0,
 				CancelCommandIndex = 1,
