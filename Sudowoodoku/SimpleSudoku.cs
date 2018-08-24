@@ -77,11 +77,7 @@ namespace Sudowoodoku {
 		private async Task<Tuple<int[,],int>> getCheatingBoard(string fileName) {
 
 
-			//Is this proper windows universal? WHo fucking knows! TODO: Error check things because as of now we fail hard af or hang
-			var lines = System.IO.File.ReadAllLines($"Template boards/{fileName}");
-
-
-			
+			var lines = System.IO.File.ReadAllLines($"Assets/Template boards/{fileName}");
 
 			if(lines.Length != 9) {
 				throw new Exception("AHHHHHHHHHHH it's totally fucked m8 (the template valid is invalid)");
@@ -97,7 +93,7 @@ namespace Sudowoodoku {
 					var character = line[y];
 
 					if(!int.TryParse(character.ToString(),out int result)) {
-						throw new Exception("Something in this tempalte file wasn't a number. GOOD JOB IDIOT");
+						throw new Exception("Something in this template file wasn't a number. GOOD JOB IDIOT");
 					}
 
 					if(result != 0) {
