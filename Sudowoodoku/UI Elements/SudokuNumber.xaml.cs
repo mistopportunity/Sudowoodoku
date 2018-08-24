@@ -141,8 +141,6 @@ namespace Sudowoodoku {
 			hasCursor = false;
 		}
 
-		private bool tappedByMouse = false;
-
 		private void clickTrigger() {
 			var frame = Window.Current.Content as Frame;
 			var page = frame.Content as GamePage;
@@ -159,7 +157,6 @@ namespace Sudowoodoku {
 
 		private void UserControl_PointerPressed(object sender,PointerRoutedEventArgs e) {
 			clickTrigger();
-			tappedByMouse = true;
 		}
 	}
 }

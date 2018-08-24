@@ -42,6 +42,7 @@ namespace Sudowoodoku {
 		private void updateBorder(bool showBorder) {
 			if(showBorder) {
 				backgroundGrid.Background = new SolidColorBrush(Color.FromArgb(255,0,0,0));
+				ElementSoundPlayer.Play(ElementSoundKind.Focus);
 			} else {
 				backgroundGrid.Background = null;
 			}

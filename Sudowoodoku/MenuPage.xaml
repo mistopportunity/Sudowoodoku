@@ -11,8 +11,8 @@
 		<Viewbox>
 			<StackPanel Width="350" Height="350" Padding="25,0,25,0">
 				<TextBlock Text="sudokoowdoku" TextWrapping="Wrap" Margin="0,115,0,0" HorizontalAlignment="Center"/>
-				<TextBox x:Name="seedInput" Margin="0,10,0,0" PlaceholderText="level number" InputScope="Number" TabIndex="0"/>
-				<Button Content="get the party started" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" Click="Button_Click" TabIndex="1"/>
+				<TextBox ElementSoundMode="Off" x:Name="seedInput" Margin="0,10,0,0" PlaceholderText="level number" InputScope="Number" TabIndex="0"/>
+				<Button ElementSoundMode="Off" Content="get the party started" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" Click="Button_Click" TabIndex="1"/>
 			</StackPanel>
 		</Viewbox>
     </Grid>

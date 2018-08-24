@@ -22,6 +22,7 @@ namespace Sudowoodoku {
 		public App() {
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
+			ElementSoundPlayer.State = ElementSoundPlayerState.On;
 		}
 
 		protected override void OnLaunched(LaunchActivatedEventArgs e) {
