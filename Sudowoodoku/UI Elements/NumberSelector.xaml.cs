@@ -68,12 +68,6 @@ namespace Sudowoodoku {
 			}
 		}
 
-		private void UserControl_Tapped(object sender,TappedRoutedEventArgs e) {
-			var frame = Window.Current.Content as Frame;
-			var page = frame.Content as GamePage;
-			page.NumberTapped(number);
-		}
-
 		public void Select() {
 			updateBorder(showBorder: true);
 		}
@@ -82,5 +76,10 @@ namespace Sudowoodoku {
 			updateBorder(showBorder: false);
 		}
 
+		private void UserControl_PointerReleased(object sender,PointerRoutedEventArgs e) {
+			var frame = Window.Current.Content as Frame;
+			var page = frame.Content as GamePage;
+			page.NumberTapped(number);
+		}
 	}
 }
