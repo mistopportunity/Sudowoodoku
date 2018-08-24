@@ -18,10 +18,8 @@
 			VerticalAlignment="Stretch"
 			Foreground="White"
 			FontFamily="Arial"
-			FontSize="8"
-			TextAlignment="Center"
-			Width="11"
-			Height="11"
+			FontSize="7"
+			TextAlignment="Center" Width="11" Height="11"
 		/>
 	</Grid>
 </UserControl>

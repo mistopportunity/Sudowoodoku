@@ -143,13 +143,6 @@ namespace Sudowoodoku {
 
 		private bool tappedByMouse = false;
 
-		private void UserControl_Tapped(object sender,TappedRoutedEventArgs e) {
-			if(!tappedByMouse) {
-				clickTrigger();
-			}
-			tappedByMouse = false;
-		}
-
 		private void clickTrigger() {
 			var frame = Window.Current.Content as Frame;
 			var page = frame.Content as GamePage;
@@ -157,10 +150,6 @@ namespace Sudowoodoku {
 		}
 
 		private void UserControl_PointerMoved(object sender,PointerRoutedEventArgs e) {
-
-#if mobiletest
-			return;
-#endif
 			if(!selected && !otherBlockSelected && !hasCursor) {
 				sendSoftSelect();
 				updateBorder(true);
@@ -168,12 +157,9 @@ namespace Sudowoodoku {
 			hasCursor = true;
 		}
 
-		private void UserControl_PointerReleased(object sender,PointerRoutedEventArgs e) {
-#if mobiletest
-			return;
-#endif
-			tappedByMouse = true;
+		private void UserControl_PointerPressed(object sender,PointerRoutedEventArgs e) {
 			clickTrigger();
+			tappedByMouse = true;
 		}
 	}
 }
