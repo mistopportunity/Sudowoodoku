@@ -129,7 +129,7 @@ namespace Sudowoodoku {
 					templatePath = "Hard.txt";
 					break;
 				case 0:
-					templatePath = "Harder.text";
+					templatePath = "Harder.txt";
 					break;
 			}
 

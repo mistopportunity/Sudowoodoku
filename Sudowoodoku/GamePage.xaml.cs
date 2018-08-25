@@ -92,7 +92,7 @@ namespace Sudowoodoku {
 				int seed = randomSeedMaker.Next();
 
 
-				LoadBoard(new SimpleSudoku(),seed,1 * Math.Pow(0.92f,++layer));
+				LoadBoard(new SimpleSudoku(),seed,1 * Math.Pow(0.85f,++layer));
 			}));
 
 			messageDialog.Commands.Add(new UICommand("No, I need more canned soup!",(action) => {
