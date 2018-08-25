@@ -158,5 +158,6 @@ namespace Sudowoodoku {
 		private void UserControl_PointerPressed(object sender,PointerRoutedEventArgs e) {
 			clickTrigger();
 		}
+
 	}
 }

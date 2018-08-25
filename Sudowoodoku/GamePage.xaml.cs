@@ -279,6 +279,60 @@ namespace Sudowoodoku {
 						NumberTapped(selectedNumber.Number);
 					}
 					break;
+				case VirtualKey.Number1:
+				case VirtualKey.NumberPad1:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(1);
+					}
+					break;
+				case VirtualKey.Number2:
+				case VirtualKey.NumberPad2:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(2);
+					}
+					break;
+				case VirtualKey.Number3:
+				case VirtualKey.NumberPad3:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(3);
+					}
+					break;
+				case VirtualKey.Number4:
+				case VirtualKey.NumberPad4:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(4);
+					}
+					break;
+				case VirtualKey.Number5:
+				case VirtualKey.NumberPad5:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(5);
+					}
+					break;
+				case VirtualKey.Number6:
+				case VirtualKey.NumberPad6:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(6);
+					}
+					break;
+				case VirtualKey.Number7:
+				case VirtualKey.NumberPad7:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(7);
+					}
+					break;
+				case VirtualKey.Number8:
+				case VirtualKey.NumberPad8:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(8);
+					}
+					break;
+				case VirtualKey.Number9:
+				case VirtualKey.NumberPad9:
+					if(NumberBar.Visibility == Visibility.Visible) {
+						NumberTapped(9);
+					}
+					break;
 			}
 		}
 
@@ -524,7 +578,15 @@ namespace Sudowoodoku {
 					block.Number = 0;
 					UpdateSoftSelected(block);
 					softSelected.SoftSelect();
-					//return;
+
+					var pieceIndexes = GetSudokuIndexes(block.BlockIndex);
+					currentSudokuBoard.UpdatePiece(
+						block.Number,
+						pieceIndexes.Item1,
+						pieceIndexes.Item2
+					);
+
+
 				}
 
 				if(!fromNumberSelection && !blockIsFeedback) {
