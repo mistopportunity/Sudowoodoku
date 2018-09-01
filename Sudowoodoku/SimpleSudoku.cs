@@ -152,6 +152,7 @@ namespace Sudowoodoku {
 		private int[,] workingBoard;
 		int currentBoardPieces;
 		public bool BoardComplete() {
+			return true;
 			if(currentBoardPieces == 81) {
 				//grid checking
 				for(var i = 0;i<9;i++) {

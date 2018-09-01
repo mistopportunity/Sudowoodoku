@@ -93,11 +93,14 @@ namespace Sudowoodoku {
 
 
 				LoadBoard(new SimpleSudoku(),seed,1 * Math.Pow(0.85f,++layer));
+				ElementSoundPlayer.Play(ElementSoundKind.Invoke);
 			}));
 
 			messageDialog.Commands.Add(new UICommand("No, I need more canned soup!",(action) => {
 
 				Frame.Navigate(typeof(MenuPage));
+
+				ElementSoundPlayer.Play(ElementSoundKind.GoBack);
 
 			}));
 
