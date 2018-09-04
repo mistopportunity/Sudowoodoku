@@ -28,40 +28,15 @@ namespace Sudowoodoku {
 			this.InitializeComponent();
 		}
 
-		protected override void OnNavigatedTo(NavigationEventArgs e) {
-			base.OnNavigatedTo(e);
-			Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
-		}
-
-		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e) {
-			base.OnNavigatingFrom(e);
-			Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
-		}
-
-		private void CoreWindow_KeyDown(CoreWindow sender,KeyEventArgs args) {
-
-			switch(args.VirtualKey) {
-
-				case VirtualKey.GamepadDPadDown:
-				case VirtualKey.GamepadDPadRight:
-				case VirtualKey.Right:
-				case VirtualKey.Down:
-
-
-					FocusManager.TryMoveFocus(FocusNavigationDirection.Previous);
-
-					break;
-				case VirtualKey.GamepadDPadLeft:
-				case VirtualKey.GamepadDPadUp:
-				case VirtualKey.Left:
-				case VirtualKey.Up:
-
-					FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
-
-					break;
-
+		protected async override void OnNavigatedTo(NavigationEventArgs e) {
+			var app = Application.Current as App;
+			if(!app.AttemptedSignIn) {
+				await app.SignIn();
 			}
-			
+			if(!app.StillSignedIn) {
+				xboxSignInButton.Visibility = Visibility.Visible;
+			}
+
 		}
 
 		private async void Button_Click(object sender,RoutedEventArgs e) {
@@ -88,6 +63,15 @@ namespace Sudowoodoku {
 			} else {
 				Frame.Navigate(typeof(GamePage),(new Random()).Next());
 
+			}
+		}
+
+		private async void xboxSignInButton_Click(object sender,RoutedEventArgs e) {
+			var app = Application.Current as App;
+			await app.SignIn();
+			if(app.StillSignedIn) {
+				xboxSignInButton.Visibility = Visibility.Collapsed;
+				xboxSignInButton.IsEnabled = true;
 			}
 		}
 	}

@@ -216,10 +216,7 @@ namespace Sudowoodoku {
 			currentView.BackRequested -= CurrentView_BackRequested;
 		}
 
-		private async void CurrentView_BackRequested(object sender,BackRequestedEventArgs e) {
-
-			e.Handled = true;
-
+		private async void ExitGame() {
 			MessageDialog dialog = new MessageDialog("Are you sure you want to quit playing?","This is so sad!") {
 				DefaultCommandIndex = 0,
 				CancelCommandIndex = 1,
@@ -234,6 +231,13 @@ namespace Sudowoodoku {
 			dialog.Commands.Add(new UICommand("No, I love this"));
 
 			await dialog.ShowAsync();
+		}
+
+		private void CurrentView_BackRequested(object sender,BackRequestedEventArgs e) {
+
+			e.Handled = true;
+
+			ExitGame();
 
 		}
 
@@ -252,26 +256,41 @@ namespace Sudowoodoku {
 			switch(args.VirtualKey) {
 				case VirtualKey.GamepadDPadLeft:
 				case VirtualKey.Left:
+				case VirtualKey.GamepadLeftThumbstickLeft:
 					Navigate(-1,0);
 					break;
 				case VirtualKey.GamepadDPadRight:
 				case VirtualKey.Right:
+				case VirtualKey.GamepadLeftThumbstickRight:
 					Navigate(1,0);
 					break;
 				case VirtualKey.GamepadDPadUp:
 				case VirtualKey.Up:
+				case VirtualKey.GamepadLeftThumbstickUp:
 					Navigate(0,-1);
 					break;
 				case VirtualKey.GamepadDPadDown:
 				case VirtualKey.Down:
+				case VirtualKey.GamepadLeftThumbstickDown:
 					Navigate(0,1);
 					break;
 				case VirtualKey.Escape:
 				case VirtualKey.GamepadB:
+				case VirtualKey.Menu:
 					if(selectedBlock != null) {
 						BlockTapped(selectedBlock);
 					} else if(softSelected != null && !softSelected.IsReadOnly) {
+
 						softSelected.Number = 0;
+
+						var pieceIndexes = GetSudokuIndexes(softSelected.BlockIndex);
+
+						currentSudokuBoard.UpdatePiece(
+							softSelected.Number,
+							pieceIndexes.Item1,
+							pieceIndexes.Item2
+						);
+
 					}
 					break;
 				case VirtualKey.GamepadA:

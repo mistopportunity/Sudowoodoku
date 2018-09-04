@@ -122,6 +122,9 @@
     </AppxManifest>
     <None Include="My lit PFX File.pfx" />
     <None Include="Sudowoodoku_StoreKey.pfx" />
+    <Content Include="xboxservices.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\LargeTile.scale-100.png" />
@@ -209,6 +212,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xbox.Live.SDK.WinRT.UWP">
+      <Version>2018.6.20180824.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

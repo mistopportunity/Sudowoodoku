@@ -80,7 +80,7 @@ namespace Sudowoodoku {
 			var lines = System.IO.File.ReadAllLines($"Assets/Template boards/{fileName}");
 
 			if(lines.Length != 9) {
-				throw new Exception("AHHHHHHHHHHH it's totally fucked m8 (the template valid is invalid)");
+				throw new Exception("AHHHHHHHHHHH it's totally not good (the template file is invalid)");
 			}
 			var board = new int[9,9];
 			var givens = 0;
@@ -93,7 +93,7 @@ namespace Sudowoodoku {
 					var character = line[y];
 
 					if(!int.TryParse(character.ToString(),out int result)) {
-						throw new Exception("Something in this template file wasn't a number. GOOD JOB IDIOT");
+						throw new Exception("Something in this template file wasn't a number. Whoopsiesss");
 					}
 
 					if(result != 0) {
@@ -152,7 +152,6 @@ namespace Sudowoodoku {
 		private int[,] workingBoard;
 		int currentBoardPieces;
 		public bool BoardComplete() {
-			return true;
 			if(currentBoardPieces == 81) {
 				//grid checking
 				for(var i = 0;i<9;i++) {
