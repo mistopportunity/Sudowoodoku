@@ -8,12 +8,14 @@
     mc:Ignorable="d">
 	<Grid Background="Black">
 		<Viewbox>
-			<StackPanel Width="350" Height="350" Padding="25,0,25,0">
-				<TextBlock Text="sudokoowdoku" TextWrapping="Wrap" Margin="0,115,0,0" HorizontalAlignment="Center"/>
-				<TextBox ElementSoundMode="FocusOnly" x:Name="seedInput" Margin="0,10,0,0" PlaceholderText="level number" InputScope="Number" IsTextPredictionEnabled="False"/>
-				<Button ElementSoundMode="Default" Content="get the party started" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" Click="Button_Click"/>
-				<Button ElementSoundMode="Default" x:Name="xboxSignInButton" Content="sign into Xbox Live" FontSize="10" HorizontalAlignment="Center" Margin="0,57,0,0" Background="#FF079C00" Width="180" Click="xboxSignInButton_Click" Foreground="White" Visibility="Collapsed" IsEnabled="False"/>
-			</StackPanel>
+			<Grid Width="350" Height="350" Padding="25,0,25,0">
+				<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
+					<TextBlock Text="sudowoodoku" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+					<TextBox PreventKeyboardDisplayOnProgrammaticFocus="True" ElementSoundMode="FocusOnly" x:Name="seedInput" Margin="0,10,0,0" PlaceholderText="level number" InputScope="Number" IsTextPredictionEnabled="False" KeyUp="seedInput_KeyUp"/>
+					<Button x:Name="StartButton" ElementSoundMode="Default" Content="get the party started" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0" Click="Button_Click"/>
+					<Button ElementSoundMode="Default" x:Name="xboxSignInButton" Content="sign into Xbox Live" FontSize="10" HorizontalAlignment="Center" Margin="0,40,0,0" Background="#FF079C00" Width="180" Click="xboxSignInButton_Click" Foreground="White" Visibility="Visible" IsEnabled="true"/>
+				</StackPanel>
+			</Grid>
 		</Viewbox>
 	</Grid>
 </Page>

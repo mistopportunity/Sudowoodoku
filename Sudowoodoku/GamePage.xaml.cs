@@ -234,11 +234,20 @@ namespace Sudowoodoku {
 		}
 
 		private void CurrentView_BackRequested(object sender,BackRequestedEventArgs e) {
-
 			e.Handled = true;
+			if((softSelected == null || (softSelected.Number == 0 || softSelected.IsReadOnly)) && selectedBlock == null) {
+				ExitGame();
+			} else {
+				EscapeSequence();
+			}
+		}
 
-			ExitGame();
-
+		public void WasSignedOutExternally() {
+			MessageDialog dialog = new MessageDialog("You have been signed out of Xbox Live, but you can continue playing","Notice") {
+				DefaultCommandIndex = 0,
+				CancelCommandIndex = 0
+			};
+			dialog.Commands.Add(new UICommand("Okie dokie"));
 		}
 
 		public GamePage() {
@@ -250,6 +259,24 @@ namespace Sudowoodoku {
 
 			allocateSudokuBlocks();
 
+		}
+
+		private void EscapeSequence() {
+			if(selectedBlock != null) {
+				BlockTapped(selectedBlock);
+			} else if(softSelected != null && !softSelected.IsReadOnly) {
+
+				softSelected.Number = 0;
+
+				var pieceIndexes = GetSudokuIndexes(softSelected.BlockIndex);
+
+				currentSudokuBoard.UpdatePiece(
+					softSelected.Number,
+					pieceIndexes.Item1,
+					pieceIndexes.Item2
+				);
+
+			}
 		}
 
 		private void CoreWindow_KeyDown(CoreWindow sender,KeyEventArgs args) {
@@ -275,23 +302,7 @@ namespace Sudowoodoku {
 					Navigate(0,1);
 					break;
 				case VirtualKey.Escape:
-				case VirtualKey.GamepadB:
-				case VirtualKey.Menu:
-					if(selectedBlock != null) {
-						BlockTapped(selectedBlock);
-					} else if(softSelected != null && !softSelected.IsReadOnly) {
-
-						softSelected.Number = 0;
-
-						var pieceIndexes = GetSudokuIndexes(softSelected.BlockIndex);
-
-						currentSudokuBoard.UpdatePiece(
-							softSelected.Number,
-							pieceIndexes.Item1,
-							pieceIndexes.Item2
-						);
-
-					}
+					EscapeSequence();
 					break;
 				case VirtualKey.GamepadA:
 				case VirtualKey.Enter:
@@ -392,6 +403,7 @@ namespace Sudowoodoku {
 			if(softSelected == null) {
 				softSelected = sudokuBlocks[40];
 				softSelected.SoftSelect();
+				ElementSoundPlayer.Play(ElementSoundKind.Focus);
 			} else {
 
 				var blockIndex = GetSudokuIndexes(softSelected.BlockIndex);
@@ -471,6 +483,8 @@ namespace Sudowoodoku {
 						newIndex
 					];
 					softSelected.SoftSelect();
+
+					ElementSoundPlayer.Play(ElementSoundKind.Focus);
 				}
 			}
 		}

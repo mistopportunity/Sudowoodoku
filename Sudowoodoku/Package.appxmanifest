@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="40193mistopportunity.Sudowoodoku" Publisher="CN=24DE700D-486A-43AF-8C58-65784861144A" Version="1.1.4.0" />
+  <Identity Name="40193mistopportunity.Sudowoodoku" Publisher="CN=24DE700D-486A-43AF-8C58-65784861144A" Version="1.1.6.0" />
   <mp:PhoneIdentity PhoneProductId="f3774480-0685-4a43-a25a-e5237d98cd57" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Sudowoodoku</DisplayName>

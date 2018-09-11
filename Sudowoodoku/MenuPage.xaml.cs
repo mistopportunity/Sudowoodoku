@@ -28,15 +28,20 @@ namespace Sudowoodoku {
 			this.InitializeComponent();
 		}
 
-		protected async override void OnNavigatedTo(NavigationEventArgs e) {
-			var app = Application.Current as App;
-			if(!app.AttemptedSignIn) {
-				await app.SignIn();
+		private void UpdateSignInButtonContent(App app) {
+			if(xboxSignInButton.IsEnabled) {
+				xboxSignInButton.Content = "sign into Xbox Live";
+			} else {
+				xboxSignInButton.Content = $"signed in as {app.primaryUser.Gamertag}";
 			}
-			if(!app.StillSignedIn) {
-				xboxSignInButton.Visibility = Visibility.Visible;
-			}
+		}
 
+
+		protected override void OnNavigatedTo(NavigationEventArgs e) {
+			var app = Application.Current as App;
+			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().SetDesiredBoundsMode(Windows.UI.ViewManagement.ApplicationViewBoundsMode.UseCoreWindow);
+			xboxSignInButton.IsEnabled = !app.StillSignedIn;
+			UpdateSignInButtonContent(app);
 		}
 
 		private async void Button_Click(object sender,RoutedEventArgs e) {
@@ -66,12 +71,25 @@ namespace Sudowoodoku {
 			}
 		}
 
+		internal void WasSignedOutExternally() {
+			xboxSignInButton.IsEnabled = true;
+			UpdateSignInButtonContent(null);
+		}
+
 		private async void xboxSignInButton_Click(object sender,RoutedEventArgs e) {
 			var app = Application.Current as App;
+			xboxSignInButton.IsEnabled = false;
+			StartButton.IsEnabled = false;
+			xboxSignInButton.Content = "signing into Xbox Live...";
 			await app.SignIn();
-			if(app.StillSignedIn) {
-				xboxSignInButton.Visibility = Visibility.Collapsed;
-				xboxSignInButton.IsEnabled = true;
+			StartButton.IsEnabled = true;
+			xboxSignInButton.IsEnabled = !app.StillSignedIn;
+			UpdateSignInButtonContent(app);
+		}
+
+		private void seedInput_KeyUp(object sender,KeyRoutedEventArgs e) {
+			if(e.Key == VirtualKey.Enter) {
+				FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
 			}
 		}
 	}
