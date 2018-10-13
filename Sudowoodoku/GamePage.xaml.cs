@@ -262,8 +262,9 @@ namespace Sudowoodoku {
 		}
 
 		private void EscapeSequence() {
+
 			if(selectedBlock != null) {
-				BlockTapped(selectedBlock);
+				BlockTapped(selectedBlock,NumberBar.Visibility == Visibility.Visible);
 			} else if(softSelected != null && !softSelected.IsReadOnly) {
 
 				softSelected.Number = 0;

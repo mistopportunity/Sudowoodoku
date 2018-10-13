@@ -74,39 +74,76 @@ namespace Sudowoodoku {
 			return newBoard;
 		}
 
-		private async Task<Tuple<int[,],int>> getCheatingBoard(string fileName) {
+		private static readonly int[,] EasyBoard = new int[,] {
+			{0,2,0,0,9,0,0,5,6},
+			{1,0,0,7,0,0,8,0,3},
+			{4,0,0,0,5,1,0,2,9},
+			{8,0,1,4,7,0,0,0,0},
+			{0,0,2,0,0,9,6,5,0},
+			{0,0,3,0,6,8,1,7,0},
+			{6,0,7,9,4,0,0,1,3},
+			{0,3,4,5,6,0,0,8,0},
+			{9,0,0,0,8,0,0,0,2},
+		};
+		private static readonly int[,] HardBoard = new int[,] {
+			{0,0,0,0,5,0,0,0,4},
+			{3,6,0,0,0,0,1,0,0},
+			{7,0,0,4,0,8,0,0,0},
+			{7,3,0,0,9,0,0,0,0},
+			{0,0,0,7,0,2,0,0,0},
+			{0,0,0,0,0,0,0,0,6},
+			{5,0,0,0,1,0,0,0,0},
+			{0,4,0,0,5,0,6,0,9},
+			{0,0,0,8,0,0,0,3,5}
+		};
+		private static readonly int[,] HarderBoard = new int[,] {
+			{0,8,0,0,9,0,0,1,0},
+			{4,0,0,0,6,0,0,0,0},
+			{0,3,0,2,0,7,0,0,0},
+			{7,0,0,0,5,0,0,0,4},
+			{0,0,0,0,9,0,0,0,0},
+			{6,0,0,3,0,0,0,0,0},
+			{0,0,0,0,0,0,6,2,8},
+			{5,0,0,0,0,6,0,3,0},
+			{0,9,0,4,0,0,0,0,1}
+		};
+		private static readonly int[,] MediumBoard = new int[,] {
+			{1,0,0,0,0,2,0,9,7},
+			{0,0,4,1,0,0,0,0,0},
+			{6,0,7,5,0,3,0,8,0},
+			{8,0,0,5,0,0,7,0,3},
+			{0,7,0,6,0,0,0,8,0},
+			{0,2,0,0,0,0,0,0,1},
+			{0,0,0,0,6,0,0,0,0},
+			{0,0,9,2,0,3,5,0,0},
+			{4,0,0,0,5,0,0,1,9}
+		};
 
-
-			var lines = System.IO.File.ReadAllLines($"Assets/Template boards/{fileName}");
-
-			if(lines.Length != 9) {
-				throw new Exception("AHHHHHHHHHHH it's totally not good (the template file is invalid)");
+		private Tuple<int[,],int> getCheatingBoard(double difficulty,Random random) {
+			int[,] board;
+			int givens = 0;
+			switch(Math.Floor(difficulty * 4)) {
+				default:
+					board = EasyBoard;
+					break;
+				case 2:
+					board = MediumBoard;
+					break;
+				case 1:
+					board = HardBoard;
+					break;
+				case 0:
+					board = HarderBoard;
+					break;
 			}
-			var board = new int[9,9];
-			var givens = 0;
-			for(int x = 0;x < 9;x++) {
-
-				for(int y = 0;y<9;y++) {
-
-					var line = lines[x];
-
-					var character = line[y];
-
-					if(!int.TryParse(character.ToString(),out int result)) {
-						throw new Exception("Something in this template file wasn't a number. Whoopsiesss");
-					}
-
-					if(result != 0) {
+			for(int y = 0;y < 9;y++) {
+				for(int x = 0;x < 9;x++) {
+					if(board[x,y] > 0) {
 						givens++;
 					}
-
-					board[x,y] = result;
-
 				}
-
 			}
 			return new Tuple<int[,], int>(board,givens);
-
 		}
 
 		private int[,] templateBoard;
@@ -114,26 +151,11 @@ namespace Sudowoodoku {
 			return templateBoard;
 		}
 
-		public async void PopulateBoard(int seed,double difficulty) {
+		public void PopulateBoard(int seed,double difficulty) {
 
 			Random random = new Random(seed);
-			string templatePath;
-			switch(Math.Floor(difficulty * 4)) {
-				default:
-					templatePath = "Easy.txt";
-					break;
-				case 2:
-					templatePath = "Medium.txt";
-					break;
-				case 1:
-					templatePath = "Hard.txt";
-					break;
-				case 0:
-					templatePath = "Harder.txt";
-					break;
-			}
 
-			var cheatingBoard = await getCheatingBoard(templatePath);
+			var cheatingBoard = getCheatingBoard(difficulty,random);
 			currentBoardPieces = cheatingBoard.Item2;
 			var board = cheatingBoard.Item1;
 
